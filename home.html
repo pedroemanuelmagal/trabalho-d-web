@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-container">
+            <header>
+                <h1>Teste Projeto</h1>
+            </header>
+            <p><a>Outra página hospedada</a></p>
+        </div>
+        <div class="content-container">
+            <div class="cards-container">
+                <div class="service-card classe-teste" id="ddd-card">
+                    <p style="font-size: 24px; color: #333; text-align: center;">Busque cidades por DDD</p>
+                    <p style="font-size: 18px; color: #333; text-align: center;">
+                        <input type="number" id="input-ddd" placeholder="Digite o DDD aqui"><br>
+                        <button id="botao-buscar-ddd">Buscar</button>
+                    </p>
+                    <div class="result-container-ddd">
+                        
+                    </div>
+                </div>
+                <div class="service-card classe-teste" id="cep-card">
+                    <p style="font-size: 24px; color: #333; text-align: center;">Busque endereço por CEP</p>
+                    <p style="font-size: 18px; color: #333; text-align: center;">
+                        <input type="text" id="input-cep" placeholder="CEP modelo 00000-000"><br>
+                        <button id="botao-buscar-cep">Buscar</button>
+                    </p>
+                    <div class="result-container-cep">
+                        
+                    </div>
+                </div>
+                <div class="service-card classe-teste" id="address-card">
+                    <p style="font-size: 24px; color: #333; text-align: center;">Busque CEP por endereço</p>
+                    <p style="font-size: 18px; color: #333; text-align: center;">
+                        <input type="text" id="input-rua" placeholder="Digite sua rua"><br>
+                        <input type="text" id="input-estado" placeholder="Digite a sigla do seu Estado"><br>
+                        <input type="text" id="input-cidade" placeholder="Digite sua cidade"><br>
+                        <button id="botao-buscar-endereco">Buscar</button>
+                    </p>
+                    <div class="result-container-address">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="history-container">
+                <p>Histórico de buscas:</p>
+                <div class="history-subcontainer">
+                    <div>
+                        <p>Buscas por DDD</p>
+                        <div class="ddd-subcontainer"></div>
+                    </div>
+                    <div>
+                        <p>Buscas por CEP</p>
+                        <div class="cep-subcontainer"></div>
+                    </div>
+                    <div>
+                        <p>Buscas por endereço</p>
+                        <div class="address-subcontainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./JS/home.js"></script>
+</body>
+
+</html>
