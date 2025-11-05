@@ -2,6 +2,12 @@ body {
     margin: 0;
 }
 
+.map-image {
+    position: relative;
+    left: 80vw;
+    bottom: 90px;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -10,6 +16,7 @@ body {
 }
 
 .header-container {
+    height: 270px;
     position: sticky;
     padding: 8px;
     box-shadow: 0px 3px 6px rgb(32, 33, 36, 0.28);
@@ -66,4 +73,5 @@ body {
 
 .history-container {
     padding: 8px;
+
 }
