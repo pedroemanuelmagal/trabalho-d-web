@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buscar CEP no Mapa (Gratuito - OpenStreetMap)</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 15px;
+            border: 1px solid #ccc;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Buscar Localização por CEP</h1>
+
+    <div>
+        <label for="cep">Digite o CEP:</label>
+        <input type="text" id="cep" placeholder="Ex: 20040002" maxlength="8" required>
+        <button onclick="buscarCEP()">Buscar no Mapa</button>
+        <p id="status"></p>
+    </div>
+
+    <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    let map;
+    let marker;
+    const defaultLocation = [-21.7611, -43.3512];
+    
+    function initMap() {
+        if (map !== undefined) map.remove();
+
+        map = L.map('map').setView(defaultLocation, 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        marker = L.marker(defaultLocation).addTo(map)
+            .bindPopup("Local Inicial").openPopup();
+    }
+    
+    initMap();
+
+    async function buscarCEP() {
+        const cepValue = document.getElementById('cep').value.replace(/\D/g, '');
+        const statusElement = document.getElementById('status');
+        statusElement.textContent = 'Buscando...';
+
+        if (cepValue.length !== 8) {
+            statusElement.textContent = 'Por favor, insira um CEP válido com 8 dígitos.';
+            return;
+        }
+
+        try {
+            const cepResponse = await fetch(`https://viacep.com.br/ws/${cepValue}/json/`);
+            const cepData = await cepResponse.json();
+
+            if (cepData.erro) {
+                statusElement.textContent = 'CEP não encontrado.';
+                return;
+            }
+
+            const fullAddress = `${cepData.logradouro}, ${cepData.bairro}, ${cepData.localidade}, ${cepData.uf}, Brasil`;
+            
+            const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}&addressdetails=1&limit=1`;
+            
+            const geoResponse = await fetch(nominatimUrl, {
+                 headers: { 'User-Agent': 'SeuAppCEP/1.0' } 
+            });
+            const geoData = await geoResponse.json();
+
+            if (geoData.length > 0) {
+                const lat = parseFloat(geoData[0].lat);
+                const lng = parseFloat(geoData[0].lon);
+                const location = [lat, lng];
+
+                map.setView(location, 16);
+                
+                marker.setLatLng(location)
+                    .bindPopup(`<b>CEP: ${cepValue}</b><br>${cepData.logradouro} - ${cepData.bairro}<br>${cepData.localidade}/${cepData.uf}`)
+                    .openPopup();
+                
+                statusElement.textContent = 'Localização encontrada!';
+            } else {
+                statusElement.textContent = 'Endereço encontrado, mas a geocodificação falhou.';
+            }
+
+        } catch (error) {
+            statusElement.textContent = `Erro: ${error.message}. Tente novamente.`;
+            console.error(error);
+        }
+    }
+</script>
+
+</body>
+</html>
